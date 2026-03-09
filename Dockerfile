@@ -1,15 +1,20 @@
 FROM python:3.13.5-slim
 
+# Prevent Python from writing .pyc files and keep logs flowing
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY requirements.txt ./
+# Copy and install dependencies first (leverages Docker cache)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN pip install -r requirements.txt
-
+# Copy the rest of the application
 COPY . .
 
+# Cloud Run ignores EXPOSE, but it's good for documentation
 EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080]
+# Use shell form to allow environment variable substitution for the port
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}

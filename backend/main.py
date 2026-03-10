@@ -129,3 +129,10 @@ async def lifespan(app: FastAPI):
     # This runs when the container shuts down
 
 app = FastAPI(lifespan=lifespan)
+
+# Baaki code ke niche ye add karein
+if __name__ == "__main__":
+    # Cloud Run automatically $PORT env variable deta hai (default 8080)
+    port = int(os.environ.get("PORT", 8080))
+    # Host hamesha 0.0.0.0 hona chahiye Cloud Run ke liye
+    uvicorn.run(app, host="0.0.0.0", port=port)

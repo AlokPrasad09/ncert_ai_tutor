@@ -49,7 +49,7 @@ def retrieve_context(question):
     # search multiple queries
     for q in queries:
 
-        query_embedding = embed_model.encode(q).tolist()
+        query_embedding = model.encode(q).tolist()
 
         results = collection.query(
             query_embeddings=[query_embedding],
@@ -77,9 +77,9 @@ def retrieve_context(question):
     # rank by length (more informative chunks first)
     ranked_docs = sorted(
         unique_docs,
-        key=lambda x: embed_model.similarity(
-            embed_model.encode(question),
-            embed_model.encode(x)
+        key=lambda x: model.similarity(
+            model.encode(question),
+            model.encode(x)
         ),
         reverse=True
     )

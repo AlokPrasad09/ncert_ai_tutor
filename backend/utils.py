@@ -3,11 +3,20 @@ from sentence_transformers import SentenceTransformer
 
 DB_PATH = "vector_db"
 
-embed_model = SentenceTransformer("all-MiniLM-L6-v2")
+model = None
+def get_model():
+    global model
+    if model is None:
+        from sentence_transformers import SentenceTransformer
+        model = SentenceTransformer("all-MiniLM-L6-v2")
+    return model
+
+
+#embed_model = SentenceTransformer("all-MiniLM-L6-v2")
 
 client = chromadb.PersistentClient(path=DB_PATH)
 
-collection = client.get_collection("ncert_kb")
+collection = client.get_or_create_collection("ncert_kb")
 
 
 # -----------------------------

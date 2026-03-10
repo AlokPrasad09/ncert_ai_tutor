@@ -8,10 +8,28 @@ from .rag_engine import generate_answer
 from .auth import hash_password, verify_password, create_access_token, verify_token
 import os
 import uvicorn
+from contextlib import asynccontextmanager
 
-Base.metadata.create_all(bind=engine)
+#app = FastAPI()
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # This runs when the container starts
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        # Consider if you want the app to crash here or continue
+    yield
+    # This runs when the container shuts down
+
+app = FastAPI(lifespan=lifespan)
+
+#@app.on_event("startup")
+#ef startup_event():
+  #  Base.metadata.create_all(bind=engine)
+
+# ---------- CORS ----------
 
 app.add_middleware(
     CORSMiddleware,
@@ -117,22 +135,11 @@ def ask_question(
 }
 from contextlib import asynccontextmanager
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # This runs when the container starts
-    try:
-        Base.metadata.create_all(bind=engine)
-    except Exception as e:
-        print(f"Database connection failed: {e}")
-        # Consider if you want the app to crash here or continue
-    yield
-    # This runs when the container shuts down
 
-app = FastAPI(lifespan=lifespan)
 
 # Baaki code ke niche ye add karein
-if __name__ == "__main__":
-    # Cloud Run automatically $PORT env variable deta hai (default 8080)
-    port = int(os.environ.get("PORT", 8080))
+#if __name__ == "__main__":
+   # # Cloud Run automatically $PORT env variable deta hai (default 8080)
+   # port = int(os.environ.get("PORT", 8080))
     # Host hamesha 0.0.0.0 hona chahiye Cloud Run ke liye
-    uvicorn.run(app, host="0.0.0.0", port=port)
+    #uvicorn.run(app, host="0.0.0.0", port=port)

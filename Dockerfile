@@ -1,4 +1,4 @@
-FROM python:3.13.5-slim
+FROM python:3.11-slim
 
 # Prevent Python from writing .pyc files and keep logs flowing
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8080
 
 # Use shell form to allow environment variable substitution for the port
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -15,7 +15,11 @@ class AuthService {
       }),
     );
 
-    return res;
+        if(res.statusCode == 200){
+      return jsonDecode(res.body);
+    }else{
+      print(res.body);
+      throw Exception("Signup failed");
   }
 
   static Future login(String email,String password) async {
@@ -29,6 +33,11 @@ class AuthService {
       }),
     );
 
-    return jsonDecode(res.body);
+    if(res.statusCode == 200){
+      return jsonDecode(res.body);
+    }else{
+      print(res.body);
+      throw Exception("Login failed");
+    }
   }
 }

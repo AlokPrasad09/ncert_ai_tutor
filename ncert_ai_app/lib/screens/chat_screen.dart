@@ -31,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   bool loading = false;
 
-  static const api = "http://192.168.29.20:8000";
+  static const api = "https://ncert-ai-tutor-2065846720.asia-south1.run.app";
 
   SpeechToText speech = SpeechToText();
 

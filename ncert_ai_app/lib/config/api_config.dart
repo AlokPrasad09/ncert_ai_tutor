@@ -1,3 +1,3 @@
 class ApiConfig {
-  static const String baseUrl = "http://192.168.29.20:8000";
+  static const String baseUrl = "https://ncert-ai-tutor-2065846720.asia-south1.run.app";
 }

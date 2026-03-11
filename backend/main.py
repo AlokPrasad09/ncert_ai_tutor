@@ -8,10 +8,20 @@ from .rag_engine import generate_answer
 from .auth import hash_password, verify_password, create_access_token, verify_token
 import os
 import uvicorn
+from contextlib import asynccontextmanager
 
-Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # This runs when the container starts
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        print(f"Database connection failed: {e}")
+        # Consider if you want the app to crash here or continue
+    yield
+    # This runs when the container shuts down
 
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -115,17 +125,5 @@ def ask_question(
     "questions_used": user.questions_used,
     "remaining": 20 - user.questions_used if user.plan == "free" else "Unlimited"
 }
-from contextlib import asynccontextmanager
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # This runs when the container starts
-    try:
-        Base.metadata.create_all(bind=engine)
-    except Exception as e:
-        print(f"Database connection failed: {e}")
-        # Consider if you want the app to crash here or continue
-    yield
-    # This runs when the container shuts down
 
-app = FastAPI(lifespan=lifespan)

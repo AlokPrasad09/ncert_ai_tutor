@@ -48,12 +48,12 @@ def retrieve_context(question):
 
     # search multiple queries
     for q in queries:
-
-        query_embedding = get_model.encode(q).tolist()
+        mode = get_model()
+        query_embedding = model.encode(q).tolist()
 
         results = collection.query(
             query_embeddings=[query_embedding],
-            n_results=3
+            n_results=5
         )
 
         docs = results["documents"][0]

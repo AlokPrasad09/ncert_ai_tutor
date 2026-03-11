@@ -49,7 +49,7 @@ def retrieve_context(question):
     # search multiple queries
     for q in queries:
 
-        query_embedding = model.encode(q).tolist()
+        query_embedding = get_model.encode(q).tolist()
 
         results = collection.query(
             query_embeddings=[query_embedding],

@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../config/api_config.dart';
 
-class AuthService {
+class AuthService 
+{
 
-  static Future signup(String email,String password) async {
+  static Future signup(String email,String password) async 
+  {
 
     final res = await http.post(
       Uri.parse("${ApiConfig.baseUrl}/signup"),
@@ -17,12 +19,16 @@ class AuthService {
 
         if(res.statusCode == 200){
       return jsonDecode(res.body);
-    }else{
+    }
+    else
+    {
       print(res.body);
       throw Exception("Signup failed");
+    }
   }
 
-  static Future login(String email,String password) async {
+  static Future login(String email,String password) async 
+  {
 
     final res = await http.post(
       Uri.parse("${ApiConfig.baseUrl}/login"),
@@ -33,9 +39,11 @@ class AuthService {
       }),
     );
 
-    if(res.statusCode == 200){
+    if(res.statusCode == 200)
+    {
       return jsonDecode(res.body);
-    }else{
+    }else
+    {
       print(res.body);
       throw Exception("Login failed");
     }
